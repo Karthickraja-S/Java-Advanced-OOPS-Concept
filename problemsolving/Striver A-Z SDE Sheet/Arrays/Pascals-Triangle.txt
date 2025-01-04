@@ -1,0 +1,52 @@
+###################################################
+############# 1st solution ########################
+###################################################
+
+class Solution {
+    public List<List<Integer>> generate(int numRows) {
+        List<List<Integer>> pT = new ArrayList<>();
+        for(int row=0;row<numRows;row++) {
+            List<Integer> rowN = new ArrayList<>();
+            for(int col=0;col<=row;col++) {
+                if(col==0 || col==row) {
+                    rowN.add(1);
+                } else {
+                    List<Integer> prevData = pT.get(row-1);
+                    int topNum = prevData.get(col);
+                    int topLeftNum = prevData.get(col-1);
+                    rowN.add(topNum+topLeftNum);
+                }
+            }
+            pT.add(rowN);
+        }
+        return pT;
+    }
+}
+
+###################################################
+############# 2nd solution ########################
+###################################################
+
+class Solution {
+    public List<Integer> getRow(int num) {
+            
+            int ans=1;
+            List<Integer> rowD = new ArrayList<>();
+            rowD.add(1);
+            for(int i=1;i<num;i++) {
+// nCr n-Num i-row. ( 1c1 \n 2c1 2c2 \n 3c1 3c2 3c3 \n 4c1 4c2 4c3 4c4 )
+//	Pattern => element = prevElement * ( row - colIndex ) / colIndex 
+                ans = ans*(num-i);
+                ans = ans/i;
+                rowD.add(ans);
+            }
+            return rowD;
+    }
+    public List<List<Integer>> generate(int numRows) {
+        List<List<Integer>> pT = new ArrayList<>();
+        for(int row=1;row<=numRows;row++) {
+            pT.add(getRow(row));
+        }
+        return pT;
+    }
+}
