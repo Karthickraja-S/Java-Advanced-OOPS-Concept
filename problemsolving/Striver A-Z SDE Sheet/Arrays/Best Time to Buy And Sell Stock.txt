@@ -1,0 +1,38 @@
+###################################################
+############# 1st solution ########################
+###################################################
+
+class Solution {
+    public int maxProfit(int[] prices) {
+        int maxProfit = 0;
+        int lowestPriceCanBuy = prices[0];
+        for(int i=1; i<prices.length; i++) {
+            if(lowestPriceCanBuy > prices[i]) {
+                // this day we can buy the stock RIGHT !
+                lowestPriceCanBuy = prices[i];
+            } else {
+                // we can sell the stock since the price > BuyedPrice !
+                int profitGained = prices[i] - lowestPriceCanBuy;
+                maxProfit = Math.max(maxProfit , profitGained);
+            }
+        }
+        return maxProfit;
+    }
+}
+
+###################################################
+############# 2nd solution ########################
+###################################################
+
+class Solution {
+    public int maxProfit(int[] prices) {
+        int minPrice=prices[0];
+        int maxProfit=0;
+
+        for(int i=1;i<prices.length;i++){
+            minPrice=Math.min(minPrice,prices[i]);
+            maxProfit=Math.max(maxProfit,prices[i]-minPrice);
+        }
+        return maxProfit;
+    }
+}

@@ -1,0 +1,68 @@
+###################################################
+############# 1st solution ########################
+###################################################
+// O(n*log(n))
+class Solution {
+    public void sortColors(int[] nums) {
+        Arrays.sort(nums);
+    }
+}
+
+
+###################################################
+############# 2nd solution ########################
+###################################################
+// Same O(n*log(n)) , but consumes more memory than above
+class Solution {
+    public void sortColors(int[] nums) {
+        TreeMap<Integer,Integer> sortedMap = new TreeMap<>();
+        for(int n : nums) {
+            sortedMap.put(n , sortedMap.getOrDefault(n,0)+1);
+        }
+        int ctr=0;
+        for(int k : sortedMap.keySet()) {
+            int freq = sortedMap.get(k);
+            for(int i=1;i<=freq;i++) {
+                nums[ctr++] = k;
+            }
+        }
+    }
+}
+
+
+###################################################
+############# 3rd solution ########################
+###################################################
+// Optimised O(N)
+
+class Solution {
+    public void swap(int[] nums,int idx1,int idx2) {
+        int temp = nums[idx1];
+        nums[idx1] = nums[idx2];
+        nums[idx2] = temp;
+    }
+    public void sortColors(int[] nums) {
+       // have a 3 pointer and think of a solution
+       // similar to Dutch National Flag Algo.
+       int low=0,mid=0;
+       int high=nums.length-1;
+       while(mid <= high) {
+        if(nums[mid] == 0) {
+            // we need to swap the arr[low] & arr[mid] element.
+            // Yes this is first element, but think a scenerio where mid is in 4thpos
+            // and low is in first pos and need to have 0.
+            swap(nums,low,mid);
+            low++;mid++; // since low's work is finished and mid's work needs to be done.
+        } else if(nums[mid] == 2) {
+            // yes you know what to do..
+            // need to swap high and mid and high--;
+            // why not mid++? since it has 0 OR 1 who knows. so need to check AGAIN
+            swap(nums,mid,high);
+            high--;
+        } else {
+            // mid only needs to be incremented. since it has crt value
+            mid++;
+        }
+       }
+    }
+}
