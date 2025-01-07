@@ -1,0 +1,114 @@
+
+Problem : https://leetcode.com/problems/gas-station/description/
+
+// TLE Solution - Brute Force Approach
+
+class Solution {
+    static boolean isPossibleToStart(int[] gas , int[] cost , int startPos) {
+        // if he fills petrol at starting pos, then
+        // the cost from startPos -> startPos+1 needs to be less than petrol filled
+        return gas[startPos] >= cost[startPos];
+    }
+    // told that only one solution exist in question itself...
+    public int canCompleteCircuit(int[] gas, int[] cost) {
+        int n = gas.length;
+        int ans = -1;
+        for (int i=0; i<n; i++) {
+            if(isPossibleToStart(gas,cost,i)) {
+                boolean possible = true;
+                // we can start from here.
+                // But we need to ensure whether we can complete a clockwise journey
+                int tankCapacity = 0;
+                int currSpot = i;
+                do{
+                    System.out.println("Start at position : "+currSpot);
+                    System.out.println("FillUp tank with Gas : "+gas[currSpot]);
+                    tankCapacity += gas[currSpot];
+                    System.out.println("Current Tank Capacity : "+tankCapacity);
+                    System.out.println("Tank Capacity needed to go next city : "+cost[currSpot]);
+                    if(tankCapacity < cost[currSpot]) {
+                // since we have less tank capacity to go to next location :(
+                        possible = false;
+                        System.out.println("Out of fuel !!");
+                        System.out.println("Going to start with another location :) ");
+                    }
+                    tankCapacity -= cost[currSpot];
+                    currSpot += 1;
+                    System.out.println("Current Tank Capacity After Reaching next position : "+tankCapacity);
+                    System.out.println("-------------------");
+                    // if rotated , then need to come at 0th position
+                    currSpot = currSpot % n;
+                }while(currSpot != i);
+                if(possible) {
+                    ans = i;
+                    break;
+                }
+            } 
+        }
+        return ans;
+    }
+}
+
+
+
+
+// OPTIMAL SOLUTION
+
+class Solution {
+    
+    // told that only one solution exist in question itself...
+    public int canCompleteCircuit(int[] gas, int[] cost) {
+        int n = gas.length;
+        int totalGas = 0;
+        int totalCost = 0;
+        for(int i=0; i<n ; i++) {
+            totalGas += gas[i];
+            totalCost += cost[i];
+        }
+        if (totalGas < totalCost) {
+            // since we cannot able to finish the circuit ! ( EDGE CASE haha )
+            return -1;
+        }
+        // now im going to travel from start.
+        int currentGas = 0;
+        int start = 0;
+
+        for(int i=0;i<n;i++) {
+            currentGas += gas[i] - cost[i];
+            if(currentGas < 0) {
+                // here we cannot able to start Right !!
+                currentGas = 0;
+		// since in question they told that if gas >= cost , sure there will be
+                // a solution.
+                start = i+1;
+            }
+        }
+
+        return start;
+        
+    }
+}
+
+
+// STILL MORE OPTIMISED SINCE ABOVE USES 2 o(n) loops
+
+class Solution {
+    public int canCompleteCircuit(int[] gas, int[] cost) {
+        int start = 0;
+        int totalGas = 0;
+        int currentGas = 0;
+
+        for (int i = 0; i < gas.length; i++) {
+            int fuelGain = gas[i] - cost[i];
+            totalGas += fuelGain;
+            currentGas += fuelGain;
+
+            if (currentGas < 0) {
+                currentGas = 0;
+                start = i + 1;
+            }
+        }
+
+        return totalGas < 0 ? -1 : start;        
+    }
+}

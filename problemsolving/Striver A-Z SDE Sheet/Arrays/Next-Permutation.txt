@@ -1,0 +1,188 @@
+###################################################
+############# 1st solution ########################
+###################################################
+
+Time Limit Exceeded since we take all the possible permutations, sorting it, then we find the next lexigraphical element.
+
+class Solution {
+    public int makeInt(int[] num) {
+        int result = 0;
+        for (int val : num) {
+            result = result * 10 + val;
+        }
+        return result;
+    }
+    public void swap(int[] nums , int st , int end) {
+        int temp = nums[st];
+        nums[st] = nums[end];
+        nums[end] = temp;
+    }
+    public void permute(int[] num ,int index , List<Integer> ans) {
+        if(index == num.length-1 ) {
+            int val = makeInt(num);
+            if(!ans.contains(val)) {
+            ans.add(val);
+            }
+            return;
+        }
+        for(int ctr=index; ctr < num.length ; ctr++) {
+            swap(num, index , ctr);
+            permute(num,index+1,ans);
+            swap(num, index , ctr);
+        }
+    }
+    public void nextPermutation(int[] nums) {
+        // just take the last number , traverse backside 
+        // check whether any other > number than the selected one.
+        // also what if the first number ned to change. 
+        // se the example..
+        List<Integer> permutted = new ArrayList<>();
+        permute(nums,0,permutted);
+        Collections.sort(permutted);
+        System.out.println(permutted);
+
+        int size = nums.length-1;
+        int ind = -1;
+        int n   = makeInt(nums);
+        for(int i=0;i<permutted.size();i++) {
+            if(permutted.get(i) == n) {
+                ind = i;
+                break;
+            }
+        }
+        System.out.println("ind : "+ind);
+        if(ind == permutted.size()-1) {
+            int val = permutted.get(0);
+            while(val > 0 ){
+                int k = val%10;
+                nums[size] = k;
+                size--;
+                val /=10;
+            }
+        } else {
+            int t = ind+1;
+            int val = permutted.get(t);
+            System.out.println("val : "+val);
+            while(val > 0 ){
+                int k = val%10;
+                nums[size] = k;
+                size--;
+                val /=10;
+            }
+        }
+    }
+}
+
+###################################################
+############# 2nd solution ########################
+###################################################
+
+class Solution {
+    public void swap(int[] nums, int st, int end) {
+        int temp = nums[st];
+        nums[st] = nums[end];
+        nums[end] = temp;
+    }
+
+    public void reverse(int[] nums, int start) {
+        int end = nums.length - 1;
+        while (start < end) {
+            swap(nums, start, end);
+            start++;
+            end--;
+        }
+    }
+
+    public void nextPermutation(int[] nums) {
+        int n = nums.length;
+        int i = n - 2;
+
+		// Ex : 1321 -> 
+		// first i want to select the number which needs to be moved to another place. ( obviously first element since, moving first element only makes the next lexico num )
+		// i will be at 0
+		// The ith element which needs to be swapped ( next immediate greatest element RIGHT ! )
+		// j will be at 2
+		// swap and becomes 2311
+		// reverse the num from i+1 to end => ( 311 -> 113 )
+		// join the num 2113 ( Thus , the next lexigographical permutation of 1321 ) 
+
+        // Step 1: Find the first decreasing element from the end
+        while (i >= 0 && nums[i] >= nums[i + 1]) {
+            i--;
+        }
+
+	// why the below check i>=0 , think if the input is 3211 , 
+	// then i will be -1, so next lexigrahical will be 1123
+        if (i >= 0) {
+            // Step 2: Find the smallest element larger than nums[i] to the right
+	    // why from last? yes from above loop itself we can confirm that all the nums are in decending order after ith index. ( so comparing from last gives us 
+	    // the immediate greatest element from nums[i]
+            int j = n - 1;
+            while (nums[j] <= nums[i]) {
+                j--;
+            }
+            // Step 3: Swap nums[i] and nums[j]
+            swap(nums, i, j);
+        }
+
+        // Step 4: Reverse the part of the array after index i
+        reverse(nums, i + 1);
+    }
+}
+
+###################################################
+############# 3rd solution ########################
+###################################################
+// STRING - NEXT PERMUTATION
+import java.util.Arrays;
+
+public class NextPermutation {
+
+    public void reverse(char[] str , int st , int end) {
+        while(st < end){
+            char temp = str[st];
+            str[st] = str[end];
+            str[end] = temp;
+            st++;end--;
+        }
+    }
+    public String getNextPermutation(String str) {
+        // "ABC" -> next lexicographically sorted permutation is ACB
+        //  BDSA -> BSDA
+        //  2471 -> 2741
+        // 4123 -> 4132
+        // 1432 -> 4123
+        int i = str.length() -2; // im gonna check which value need to take to swap
+        // consider number 2471 , here i need to take 4 which needs to swap with next immediate greatest element ( 2714 )
+        char[] strArr = str.toCharArray();
+        while(i>=0 && (strArr[i] > strArr[i+1])) {
+            i--;
+        }
+        if(i>=0) {
+            // i have the number which needs to be replaced. But where?
+            // the next immediate greatest element.
+            // we can traverse from back since from back we already know that it is sorted.
+            int j = str.length()-1;
+            while(j<i && strArr[i] > strArr[j]) {
+                j--;
+            }
+            //swap
+            char temp = strArr[i];
+            strArr[i] = strArr[j];
+            strArr[j] = temp;
+
+            reverse(strArr,i+1 , str.length()-1);
+        } else {
+            // the string is like CBA which next permutation will be ABC
+            reverse(strArr,0,str.length()-1);
+        }
+
+        return Arrays.toString(strArr);
+    }
+    public static void main(String[] args) {
+        System.out.println(new NextPermutation().getNextPermutation("12543"));
+        System.out.println(new NextPermutation().getNextPermutation("12"));
+        System.out.println(new NextPermutation().getNextPermutation("abedc")); // similar to 12543 -> 13245 -> acbde
+    }
+}
+
