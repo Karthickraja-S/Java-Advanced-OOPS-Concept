@@ -1,0 +1,132 @@
+
+Question : [[1, 3], [2, 4], [2, 6], [8, 10], [8, 9], [9, 11], [15, 18], [16, 17]]
+Answer : [[1, 6], [8, 11], [15, 18]]
+Question : [[1, 8], [2, 5]]
+Answer : [[1, 8]]
+
+###################################################
+############# 1st solution ########################
+###################################################
+
+BRUTE FORCE
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+public class MergeOverLapSubArray {
+    public static int[][] getMergedOverLapSubArray(int[][] arr) {
+
+        // Arrays.sort(arr, (o1, o2) -> (o1[0] > o2[0]) ? 1 : -1);
+        // The above fails for Huge Inputs -
+        // java.lang.IllegalArgumentException: Comparison method violates its general contract!
+        // So used the below impl.
+
+	Arrays.sort(arr, new Comparator<int[]>() {
+            public int compare(int[] a, int[] b) {
+                return a[0] - b[0];
+            }
+        });
+
+	// The above can be written as Arrays.sort(arr, Comparator.comparingInt(a -> a[0])); too
+
+        System.out.println("Question : "+Arrays.deepToString(arr));
+
+        List<int[]> ans = new ArrayList<>();
+        ans.add(arr[0]);
+        for(int i=1 ;i<arr.length ; i++) {
+            int[] element = arr[i];
+            int[] prevElement = ans.get(ans.size()-1);
+            if(element[0] <= prevElement[1]) {
+                // overlaps.
+                // but here is another one base condition!
+                // what if {1,4} , {2,3} ==> {1,4} is the answer RIGHT..!
+                if(element[1] > prevElement[1]) {
+                    prevElement[1] = element[1];
+                }
+            } else {
+                ans.add(arr[i]);
+            }
+        }
+        int[][] answer = new int[ans.size()][2];
+        int i=0;
+        for(int[] v : ans) {
+            answer[i++] = v;
+        }
+        return answer;
+    }
+    public static void main(String[] args) {
+        int[][] arr = {{1,3},{2,6},{8,9},{9,11},{8,10},{2,4},{15,18},{16,17}};  
+        int[][] arr2 = {{1,8},{2,5}}; 
+
+        int[][] ans = getMergedOverLapSubArray(arr);
+        System.out.println("Answer : "+Arrays.deepToString(ans));
+
+        int[][] ans2 = getMergedOverLapSubArray(arr2);
+        System.out.println("Answer : "+Arrays.deepToString(ans2));
+
+    }
+}
+
+
+
+###################################################
+############# 2nd solution ########################
+###################################################
+
+
+class Solution {
+    public int[][] merge(int[][] intervals) {
+        // Step 1: Find the maximum start point among all intervals
+        int max = 0;
+        for (int i = 0; i < intervals.length; i++) {
+            max = Math.max(intervals[i][0], max); // Update max with the highest start point
+        }
+
+        // Step 2: Create a mapping array to track the farthest end for each start point
+        int[] mp = new int[max + 1];
+        for (int i = 0; i < intervals.length; i++) {
+            int start = intervals[i][0];
+            int end = intervals[i][1];
+            // Store the farthest end (plus 1 for easier processing) for each start point
+            mp[start] = Math.max(end + 1, mp[start]);
+        }
+
+        // Step 3: Initialize variables for merging intervals
+        int r = 0;                // Tracks the number of merged intervals
+        int have = -1;            // Tracks the current maximum end of the interval being merged
+        int intervalStart = -1;   // Tracks the start of the current interval being merged
+
+        // Step 4: Iterate through the mapping array to merge intervals
+        for (int i = 0; i < mp.length; i++) {
+            if (mp[i] != 0) { // If a start point exists in the mapping array
+                if (intervalStart == -1) intervalStart = i; // Start a new interval if not already started
+                have = Math.max(mp[i] - 1, have); // Update the current farthest end point
+            }
+            if (have == i) { // If the current interval ends at this point
+                // Save the merged interval in the intervals array
+                intervals[r++] = new int[] { intervalStart, have };
+                have = -1;            // Reset the end point tracker
+                intervalStart = -1;   // Reset the start point tracker
+            }
+        }
+
+        // Step 5: Handle any remaining interval that hasn't been added
+        if (intervalStart != -1) {
+            intervals[r++] = new int[] { intervalStart, have };
+        }
+
+        // Step 6: If all intervals fit into the original array, return it
+        if (intervals.length == r) {
+            return intervals;
+        }
+
+        // Step 7: Otherwise, create a new array to store the result and return it
+        int[][] res = new int[r][];
+        for (int i = 0; i < r; i++) {
+            res[i] = intervals[i];
+        }
+
+        return res; // Return the merged intervals
+    }
+}
