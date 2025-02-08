@@ -1,0 +1,56 @@
+class Solution {
+    public int findDuplicate(int[] nums) {
+        int arr[] = new int[100001];
+        for(int i : nums){
+            if(arr[i]!=0) {
+                return i;
+            }
+            arr[i] = 1;
+        }
+        return -1;
+    }
+}
+
+//But the questio itself given that max number will be of N+1 . ( len of array + 1 ) is the max . So why do i need to create an arr of size 100001??
+// Also why int array , it consumes more memory right!!. So creating boolean array is enough.
+
+class Solution {
+    public int findDuplicate(int[] nums) {
+        boolean arr[] = new boolean[nums.length+1];
+        for(int i : nums){
+            if(arr[i]) {
+                return i;
+            }
+            arr[i] = true;
+        }
+        return -1;
+    }
+}
+
+
+// Some used Collections too !! 
+class Solution {
+    public int findDuplicate(int[] nums) {
+        List<Integer> array = new ArrayList(Arrays.stream(nums).boxed().toList());
+
+        // HashSet<Integer> set = new HashSet<>(array);
+        // set.forEach(array::remove);
+        // return array.getFirst();
+
+        // TreeMap<Integer, Integer> map = new TreeMap<>();
+        // array.forEach(e -> map.put(Collections.frequency(array, e), e));
+        // return map.get(map.lastKey());
+
+        // for (Integer i : array) {
+        //     if(Collections.frequency(array, i) > 1) return i;
+        // }
+        // return 0;
+
+        boolean[] t = new boolean[nums.length];
+        for (int i : nums){
+            if(t[i]) return i;
+            t[i] = true;
+        }
+        return 0;
+    }
+}

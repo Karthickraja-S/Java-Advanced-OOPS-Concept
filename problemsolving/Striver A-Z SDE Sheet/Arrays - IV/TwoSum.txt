@@ -1,0 +1,28 @@
+class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        int[] ans = new int[2];
+        Map<Integer,Integer> hm = new HashMap<>();
+        int index = 0;
+        for(int num : nums) {
+            hm.put(num , index);
+            index++;
+        }
+        for(int key : hm.keySet()) {
+            if(hm.containsKey( (target-key) ) ) {
+                ans[0] = hm.get(key);
+                for(int i=0 ; i<nums.length;i++) {
+                    // why i!=ans[0] ? since we need not to take the same element 
+                    // again ! , and why starting from 0?
+                    // since we may have target-key in first itself :)
+                    if(nums[i] == target-key && i!=ans[0]) {
+                        ans[1] = i;
+                        break;
+                    }
+                }
+            //ans[1] = hm.get(target-key);
+                break;
+            }
+        }
+        return ans;
+    }
+}

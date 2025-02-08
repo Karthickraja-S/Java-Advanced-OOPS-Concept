@@ -155,7 +155,7 @@ public class NextPermutation {
         int i = str.length() -2; // im gonna check which value need to take to swap
         // consider number 2471 , here i need to take 4 which needs to swap with next immediate greatest element ( 2714 )
         char[] strArr = str.toCharArray();
-        while(i>=0 && (strArr[i] > strArr[i+1])) {
+        while(i>=0 && (strArr[i] >= strArr[i+1])) {
             i--;
         }
         if(i>=0) {

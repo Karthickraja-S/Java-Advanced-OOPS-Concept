@@ -1,0 +1,80 @@
+// Extra Space Complexity , But O(M+N)
+
+class Solution {
+    public void merge(int[] nums1, int m, int[] nums2, int n) {
+        int[] mergedArr = new int[m+n];
+        int p1=0,p2=0;
+        int p=0;
+        while(p1<m && p2<n) {
+            if(nums1[p1] < nums2[p2]) {
+                mergedArr[p++] = nums1[p1++];
+            } else if(nums1[p1] == nums2[p2]) {
+                mergedArr[p++] = nums1[p1];
+                mergedArr[p++] = nums2[p2];
+                p1++;p2++;
+            } else {
+                mergedArr[p++] = nums2[p2++];
+            }
+        }
+        while(p1<m){
+            mergedArr[p++] = nums1[p1++];
+        } 
+        while(p2<n){
+            mergedArr[p++] = nums2[p2++];
+        }
+        for(int i=0;i<m+n ; i++) {
+            nums1[i] = mergedArr[i];
+        }
+    }
+}
+
+// No Space Complexity , But used sort method which uses O( n*log(n) )
+
+class Solution {
+    public void merge(int[] nums1, int m, int[] nums2, int n) {
+        for(int i=m;i<nums1.length;i++) {
+            nums1[i] = nums2[i-m];
+        }
+        Arrays.sort(nums1);
+    }
+}
+
+
+class Solution {
+    public void merge(int[] nums1, int m, int[] nums2, int n) {
+        
+        int lenIndex = (m+n)-1;
+        --m;
+        --n;
+        for(int itr=lenIndex; itr>=0; --itr) {
+            if(m < 0) {
+                nums1[itr] = nums2[n];
+                --n;
+                continue;
+            }
+
+            if(n < 0) {
+                nums1[itr] = nums1[m];
+                --m;
+                continue;
+            }
+
+		// think Input: nums1 = [1,2,3,0,0,0], m = 3, nums2 = [2,5,6], n = 3
+		// Output: [1,2,2,3,5,6]
+		// traverse from last in nums1 , and check which no needs to be replaced. nums2[n] OR nums1[m] ?? 
+		// replace the 0 and check for another One. lastly add the remaining nos.
+
+
+            if(nums1[m] > nums2[n]) {
+                nums1[itr] = nums1[m];
+                --m;
+            } else {
+                nums1[itr] = nums2[n];
+                --n;
+            }
+        } 
+    }
+}
+
+
+
