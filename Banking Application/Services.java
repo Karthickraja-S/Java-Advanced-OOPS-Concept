@@ -23,7 +23,8 @@ public class Services {
     }
 
     static void InitializeTheData() throws FileNotFoundException{
-            File file = new File("CustomerDetails.txt");
+        String filePath = System.getProperty("user.dir") + File.separator + "Banking Application" + File.separator;
+        File file = new File(filePath + "CustomerDetails.txt");
             Scanner filesdata = new Scanner(file);
             while(filesdata.hasNextLine()){
                 String datas[] = filesdata.nextLine().split(" ");
@@ -35,8 +36,9 @@ public class Services {
     }
 
     static void AddToFile(customer data) throws IOException{
-        FileWriter file = new FileWriter("CustomerDetails.txt",true);
-        String datatoBeinserted = String.valueOf(customer.custid+" "+data.accno+" "+data.name+" "+data.balance+" "+data.encpass+"\n");
+        String filePath = System.getProperty("user.dir") + File.separator + "Banking Application" + File.separator;
+        FileWriter file = new FileWriter(filePath + "CustomerDetails.txt",true);
+        String datatoBeinserted = customer.custid + " " + data.accno + " " + data.name + " " + data.balance + " " + data.encpass + "\n";
         file.write(datatoBeinserted);
         file.close();
 
