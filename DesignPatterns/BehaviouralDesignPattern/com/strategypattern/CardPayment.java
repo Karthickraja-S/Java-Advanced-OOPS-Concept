@@ -10,7 +10,7 @@ public class CardPayment implements PaymentProcessor{
         this.cvv = cvv;
     }
     @Override
-    public void pay(){
+    public void pay(int amount){
         System.out.println("Processing payment with card payment with accNo : "+accNo);
     }
 

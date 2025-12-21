@@ -6,7 +6,7 @@ public class PaymentStrategy {
     public PaymentStrategy(PaymentProcessor processor) {
         this.processor = processor;
     }
-    public void pay() {
-        this.processor.pay();
+    public void pay(int amount) {
+        this.processor.pay(amount);
     }
 }

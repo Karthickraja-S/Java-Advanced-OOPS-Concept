@@ -1,5 +1,5 @@
 package com.strategypattern;
 
 public interface PaymentProcessor {
-    public void pay();
+    public void pay(int amount);
 }

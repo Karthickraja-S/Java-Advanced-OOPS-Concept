@@ -5,7 +5,7 @@ public class GpayPayment implements PaymentProcessor{
     public GpayPayment(int pin) {
         this.pin = pin;
     }
-    public void pay() {
+    public void pay(int amount) {
         System.out.println("Processing payment with Gpay Accounts...");
     }
 }

@@ -17,6 +17,6 @@ public class Client {
         } else {
             System.out.println("Cash on delivery chosen by default.");
         }
-        if(strategy!= null) strategy.pay();
+        if(strategy!= null) strategy.pay(500);
     }
 }
