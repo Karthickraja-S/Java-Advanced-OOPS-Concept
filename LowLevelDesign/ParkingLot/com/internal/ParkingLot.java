@@ -14,6 +14,7 @@ import java.util.*;
 public class ParkingLot {
     private static Map<Integer,ParkingFloor> parkingFloors = new HashMap<>();
     Map<Long,Ticket> currentTicket = new HashMap<>();
+    private ChargeStrategy strategy = new ChargeStrategy(new EventBasedCharging());
 
     static  {
         ParkingFloor floor1 = new ParkingFloor();
@@ -77,7 +78,7 @@ public class ParkingLot {
         }
         // calculate fair and process payment. if payment success do the below line
 
-        int fare = new ChargeStrategy(new EventBasedCharging()).getFare(ticket);
+        int fare = strategy.getFare(ticket);
         boolean status = new PaymentFactoryProvider()
                 .getPaymentProcessor(PaymentMode.UPI)
                 .processPayment(fare);
