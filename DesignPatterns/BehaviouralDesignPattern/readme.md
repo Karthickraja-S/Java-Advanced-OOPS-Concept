@@ -16,5 +16,8 @@
     1. Similar to COR principle, however the sending object will be converted in each stage.
     Ex : Say an Document Object is being passed, in first class header footer is added , 
     second class adds data to it , third class adds signature to it and so on..
-
+## State Design pattern
+    1. Calling the respective method based on the current state of the object. If the object state changes,
+        then its behaviour needs to be changed.
+    Ref : https://www.geeksforgeeks.org/system-design/state-design-pattern/
     
