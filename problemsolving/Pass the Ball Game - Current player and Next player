@@ -43,7 +43,7 @@ In the sample input, 4 friends are sitting in a circle.
 They are A, C, D, and F. Next, the ball is passed 7 times in a sequence, from D to Fto A to C to D to F to A to C. 
 The ballis passed in the player's seated order, so the directions Clockwise and the current plaver is C, who receives the ball at last and the next player is D.
 */
-public class Main
+public class ClientGame
 {
     static boolean isClockwise(char[] ch , char curr , char next) {
         for(int i=0;i<ch.length;i++){
